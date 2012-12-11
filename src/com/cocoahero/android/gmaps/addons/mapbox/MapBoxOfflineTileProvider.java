@@ -76,6 +76,10 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     public int getMaximumZoom() {
         return this.mMaximumZoom;
     }
+    
+    public boolean isZoomLevelAvailable(int zoom) {
+        return (zoom >= this.mMinimumZoom) && (zoom <= this.mMaximumZoom);
+    }
 
     // ------------------------------------------------------------------------
     // Private Methods
@@ -92,10 +96,6 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
             }
             c.close();
         }
-    }
-
-    private boolean isZoomLevelAvailable(int zoom) {
-        return (zoom >= this.mMinimumZoom) && (zoom <= this.mMaximumZoom);
     }
 
     private boolean isDatabaseAvailable() {
