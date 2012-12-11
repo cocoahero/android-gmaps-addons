@@ -24,8 +24,12 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     // ------------------------------------------------------------------------
 
     public MapBoxOfflineTileProvider(File file) {
+        this(file.getAbsolutePath());
+    }
+    
+    public MapBoxOfflineTileProvider(String pathToFile) {
         int flags = SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS;
-        this.mDatabase = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, flags);
+        this.mDatabase = SQLiteDatabase.openDatabase(pathToFile, null, flags);
         this.calculateZoomConstraints();
     }
 
@@ -57,6 +61,15 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     // Closeable Interface
     // ------------------------------------------------------------------------
 
+    /**
+     * Closes the provider, cleaning up any background resources.
+     * 
+     * <p>
+     * You must call {@link #close()} when you are finished using an instance of
+     * this provider. Failing to do so may leak resources, such as the backing
+     * SQLiteDatabase.
+     * </p>
+     */
     @Override
     public void close() {
         if (this.mDatabase != null) {
@@ -69,14 +82,33 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     // Public Methods
     // ------------------------------------------------------------------------
 
+    /**
+     * The minimum zoom level supported by this provider.
+     * 
+     * @return the minimum zoom level supported or {@link Integer.MIN_VALUE} if
+     *         it could not be determined.
+     */
     public int getMinimumZoom() {
         return this.mMinimumZoom;
     }
 
+    /**
+     * The maximum zoom level supported by this provider.
+     * 
+     * @return the maximum zoom level supported or {@link Integer.MAX_VALUE} if
+     *         it could not be determined.
+     */
     public int getMaximumZoom() {
         return this.mMaximumZoom;
     }
-    
+
+    /**
+     * Determines if the requested zoom level is supported by this provider.
+     * 
+     * @param zoom The requested zoom level.
+     * @return {@code true} if the requested zoom level is supported by this
+     *         provider.
+     */
     public boolean isZoomLevelAvailable(int zoom) {
         return (zoom >= this.mMinimumZoom) && (zoom <= this.mMaximumZoom);
     }
