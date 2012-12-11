@@ -1,1 +1,1 @@
-# Android Google Maps API v2 Addons
+# Android Google Maps API v2 Add-ons
