@@ -95,7 +95,7 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     }
 
     private boolean isZoomLevelAvailable(int zoom) {
-        return (this.mMinimumZoom <= zoom) && (this.mMaximumZoom >= zoom);
+        return (zoom >= this.mMinimumZoom) && (zoom <= this.mMaximumZoom);
     }
 
     private boolean isDatabaseAvailable() {
