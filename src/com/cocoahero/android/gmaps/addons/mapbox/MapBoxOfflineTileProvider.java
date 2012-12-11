@@ -15,8 +15,8 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     // Instance Variables
     // ------------------------------------------------------------------------
 
-    private int mMinimumZoom = -1;
-    private int mMaximumZoom = -1;
+    private int mMinimumZoom = Integer.MIN_VALUE;
+    private int mMaximumZoom = Integer.MAX_VALUE;
     private SQLiteDatabase mDatabase;
 
     // ------------------------------------------------------------------------
