@@ -6,6 +6,8 @@ import java.io.File;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileProvider;
 
@@ -16,7 +18,11 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     // ------------------------------------------------------------------------
 
     private int mMinimumZoom = Integer.MIN_VALUE;
+
     private int mMaximumZoom = Integer.MAX_VALUE;
+
+    private LatLngBounds mBounds;
+
     private SQLiteDatabase mDatabase;
 
     // ------------------------------------------------------------------------
@@ -26,11 +32,12 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     public MapBoxOfflineTileProvider(File file) {
         this(file.getAbsolutePath());
     }
-    
+
     public MapBoxOfflineTileProvider(String pathToFile) {
         int flags = SQLiteDatabase.OPEN_READONLY | SQLiteDatabase.NO_LOCALIZED_COLLATORS;
         this.mDatabase = SQLiteDatabase.openDatabase(pathToFile, null, flags);
         this.calculateZoomConstraints();
+        this.calculateBounds();
     }
 
     // ------------------------------------------------------------------------
@@ -107,6 +114,16 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     }
 
     /**
+     * The geographic bounds available from this provider.
+     * 
+     * @return the geographic bounds available or {@link null} if it could not
+     *         be determined.
+     */
+    public LatLngBounds getBounds() {
+        return this.mBounds;
+    }
+
+    /**
      * Determines if the requested zoom level is supported by this provider.
      * 
      * @param zoom The requested zoom level.
@@ -150,6 +167,36 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
             c.moveToFirst();
             if (!c.isAfterLast()) {
                 this.mMaximumZoom = c.getInt(0);
+            }
+            c.close();
+        }
+    }
+
+    private void calculateBounds() {
+        if (this.isDatabaseAvailable()) {
+            String[] projection = new String[] {
+                "value"
+            };
+
+            String[] subArgs = new String[] {
+                "bounds"
+            };
+
+            Cursor c = this.mDatabase.query("metadata", projection, "name = ?", subArgs, null, null, null);
+
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                String[] parts = c.getString(0).split(",\\s*");
+
+                double w = Double.parseDouble(parts[0]);
+                double s = Double.parseDouble(parts[1]);
+                double e = Double.parseDouble(parts[2]);
+                double n = Double.parseDouble(parts[3]);
+
+                LatLng ne = new LatLng(n, e);
+                LatLng sw = new LatLng(s, w);
+
+                this.mBounds = new LatLngBounds(sw, ne);
             }
             c.close();
         }
