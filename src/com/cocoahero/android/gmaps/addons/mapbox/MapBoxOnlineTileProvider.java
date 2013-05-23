@@ -2,29 +2,24 @@ package com.cocoahero.android.gmaps.addons.mapbox;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Random;
 
 import com.google.android.gms.maps.model.UrlTileProvider;
 
 public class MapBoxOnlineTileProvider extends UrlTileProvider {
 
-    private static final String[] FORMATS;
+    private static final String FORMAT;
 
     static {
-        String[] servers = new String[] { "a", "b", "c", "d" };
-        String[] formats = new String[servers.length];
-        for (int i = 0; i < servers.length; i++) {
-            formats[i] = String.format("%%s://%s.tiles.mapbox.com/v3/%%s/%%d/%%d/%%d.png", servers[i]);
-        }
-        FORMATS = formats;
+        FORMAT = "%s://api.tiles.mapbox.com/v3/%s/%d/%d/%d.png";
     }
 
     // ------------------------------------------------------------------------
     // Instance Variables
     // ------------------------------------------------------------------------
 
+    private boolean mHttpsEnabled;
+
     private String mMapIdentifier;
-    private boolean mUseSSL;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -34,39 +29,58 @@ public class MapBoxOnlineTileProvider extends UrlTileProvider {
         this(mapIdentifier, false);
     }
 
-    public MapBoxOnlineTileProvider(String mapIdentifier, boolean useSSL) {
+    public MapBoxOnlineTileProvider(String mapIdentifier, boolean https) {
         super(256, 256);
 
+        this.mHttpsEnabled = https;
         this.mMapIdentifier = mapIdentifier;
-        this.mUseSSL = useSSL;
     }
 
     // ------------------------------------------------------------------------
     // Public Methods
     // ------------------------------------------------------------------------
-    
+
+    /**
+     * The MapBox map identifier being used by this provider.
+     * 
+     * @return the MapBox map identifier being used by this provider.
+     */
     public String getMapIdentifier() {
         return this.mMapIdentifier;
     }
-    
-    public void setMapIdentifier(String anIdentifier) {
-        this.mMapIdentifier = anIdentifier;
+
+    /**
+     * Sets the identifier of the MapBox hosted map you wish to use.
+     * 
+     * @param aMapIdentifier the identifier of the map.
+     */
+    public void setMapIdentifier(String aMapIdentifier) {
+        this.mMapIdentifier = aMapIdentifier;
     }
-    
-    public boolean isSSLEnabled() {
-        return this.mUseSSL;
+
+    /**
+     * Whether this provider will use HTTPS when requesting tiles.
+     * 
+     * @return {@link true} if HTTPS is enabled on this provider.
+     */
+    public boolean isHttpsEnabled() {
+        return this.mHttpsEnabled;
     }
-    
-    public void setSSLEnabled(boolean enableSSL) {
-        this.mUseSSL = enableSSL;
+
+    /**
+     * Sets whether this provider should use HTTPS when requesting tiles.
+     * 
+     * @param enabled
+     */
+    public void setHttpsEnabled(boolean enabled) {
+        this.mHttpsEnabled = enabled;
     }
 
     @Override
     public URL getTileUrl(int x, int y, int z) {
-        String f = FORMATS[new Random().nextInt(FORMATS.length)];
-        String p = this.mUseSSL ? "https" : "http";
         try {
-            return new URL(String.format(f, p, this.mMapIdentifier, z, x, y));
+            String protocol = this.mHttpsEnabled ? "https" : "http";
+            return new URL(String.format(FORMAT, protocol, this.mMapIdentifier, z, x, y));
         }
         catch (MalformedURLException e) {
             return null;
