@@ -41,10 +41,14 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
     public Tile getTile(int x, int y, int z) {
         Tile tile = NO_TILE;
         if (this.isZoomLevelAvailable(z) && this.isDatabaseAvailable()) {
-            int row = (int) (Math.pow(2, z) - y);
-            String[] projection = { "tile_data" };
+            String[] projection = {
+                "tile_data"
+            };
+            int row = ((int) (Math.pow(2, z) - y) - 1);
             String predicate = "tile_row = ? AND tile_column = ? AND zoom_level = ?";
-            String[] values = { String.valueOf(row), String.valueOf(x), String.valueOf(z) };
+            String[] values = {
+                    String.valueOf(row), String.valueOf(x), String.valueOf(z)
+            };
             Cursor c = this.mDatabase.query("tiles", projection, predicate, values, null, null, null);
             if (c != null) {
                 c.moveToFirst();
