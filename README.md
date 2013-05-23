@@ -12,6 +12,34 @@ A collection of add-ons for use with the Android Google Maps API v2 framework.
 3. Import the library into your Eclipse workspace.
 4. Add the newly imported Android Library Project as a dependency to your application project.
 
+## Sample Usage
+
+If you have an MBTiles offline layer you would like to use, the following code should work.
+
+```` java
+// Retrieve GoogleMap instance from MapFragment or elsewhere
+GoogleMap map;
+
+// Create new TileOverlayOptions instance.
+TileOverlayOptions opts = new TileOverlayOptions();
+
+// Get a File reference to the MBTiles file.
+File myMBTiles;
+
+// Create an instance of MapBoxOfflineTileProvider.
+MapBoxOfflineTileProvider provider = new MapBoxOfflineTileProvider(myMBTiles);
+
+// Set the tile provider on the TileOverlayOptions.
+opts.tileProvider(provider);
+
+// Add the tile overlay to the map.
+TileOverlay overlay = map.addTileOverlay(opts);
+
+// Sometime later when the map view is destroyed, close the provider.
+// This is important to prevent a leak of the backing SQLiteDatabase.
+provider.close();
+````
+
 ## License
 Copyright (c) 2012 Jonathan Baker
 
