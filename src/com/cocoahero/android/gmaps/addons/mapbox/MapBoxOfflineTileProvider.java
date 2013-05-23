@@ -123,12 +123,33 @@ public class MapBoxOfflineTileProvider implements TileProvider, Closeable {
 
     private void calculateZoomConstraints() {
         if (this.isDatabaseAvailable()) {
-            String[] projection = { "min(zoom_level)", "max(zoom_level)" };
-            Cursor c = this.mDatabase.query("tiles", projection, null, null, null, null, null);
+            String[] projection = new String[] {
+                "value"
+            };
+
+            String[] minArgs = new String[] {
+                "minzoom"
+            };
+
+            String[] maxArgs = new String[] {
+                "maxzoom"
+            };
+
+            Cursor c;
+
+            c = this.mDatabase.query("metadata", projection, "name = ?", minArgs, null, null, null);
+
             c.moveToFirst();
             if (!c.isAfterLast()) {
                 this.mMinimumZoom = c.getInt(0);
-                this.mMaximumZoom = c.getInt(1);
+            }
+            c.close();
+
+            c = this.mDatabase.query("metadata", projection, "name = ?", maxArgs, null, null, null);
+
+            c.moveToFirst();
+            if (!c.isAfterLast()) {
+                this.mMaximumZoom = c.getInt(0);
             }
             c.close();
         }
