@@ -40,7 +40,7 @@ provider.close();
 ````
 
 ## Issues / Support
-The key behind the beauty of open source software is community collaboration. Please do not email me, or any committers directly regarding issues or support of this library. Please use [GitHub Issues](https://github.com/cocoahero/android-gmaps-addons/issues) for these type of things so that others may help or learn from it.
+The key behind the beauty of open source software is community collaboration. Please do not email me, or any committers directly regarding issues or support of this library. Please use [GitHub Issues](https://github.com/cocoahero/android-gmaps-addons/issues) for these types of things so that others may help or learn from them.
 
 ## License
 Copyright (c) 2012 Jonathan Baker
