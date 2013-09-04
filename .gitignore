@@ -11,6 +11,7 @@
 # Generated Files
 bin/
 gen/
+.idea/
 
 # Mac OS X
 .DS_Store
