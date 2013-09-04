@@ -39,6 +39,16 @@ TileOverlay overlay = map.addTileOverlay(opts);
 provider.close();
 ````
 
+## Maki
+
+Maki is MapBox's overlay icons API. The class MakiFactory displays Maki icons on a map just by specifying the icon name and its lat/lon.
+
+```` java
+new MakiFactory(map).drawMaki("campsite", lat, lon);
+````
+
+A full list of icon names can be found [here](http://www.mapbox.com/maki/).
+
 ## Issues / Support
 The key behind the beauty of open source software is community collaboration. Please do not email me, or any committers directly regarding issues or support of this library. Please use [GitHub Issues](https://github.com/cocoahero/android-gmaps-addons/issues) for these types of things so that others may help or learn from them.
 
