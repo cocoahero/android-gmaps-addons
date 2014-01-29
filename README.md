@@ -13,6 +13,30 @@ A collection of add-ons for use with the Android Google Maps API v2 framework.
 
 ## Sample Usage
 
+### Online MapBox Map Layer
+If you have a map layer created on MapBox.com, you can use an instance of MapBoxOnlineTileProvider to display it.
+
+```` java
+// Retrieve GoogleMap instance from MapFragment or elsewhere
+GoogleMap map;
+
+// Create new TileOverlayOptions instance.
+TileOverlayOptions opts = new TileOverlayOptions();
+
+// Find your MapBox online map ID.
+String myMapID = "username.mapID";
+
+// Create an instance of MapBoxOnlineTileProvider.
+MapBoxOnlineTileProvider provider = new MapBoxOnlineTileProvider(myMapID);
+
+// Set the tile provider on the TileOverlayOptions.
+opts.tileProvider(provider);
+
+// Add the tile overlay to the map.
+TileOverlay overlay = map.addTileOverlay(opts);
+````
+
+### Offline MBTiles Layer
 If you have an MBTiles offline layer you would like to use, the following code should work.
 
 ```` java
@@ -38,6 +62,11 @@ TileOverlay overlay = map.addTileOverlay(opts);
 // This is important to prevent a leak of the backing SQLiteDatabase.
 provider.close();
 ````
+
+## Tips & Tricks
+
+### Google Maps Sans Google
+If you have no need for Google's baselayer, you can turn it off my setting your GoogleMap instance's map type to `GoogleMap.MAP_TYPE_NONE`. This also has the added benefit of making your app completely offline capable when paired with a MapBoxOfflineTileProvider.
 
 ## Issues / Support
 The key behind the beauty of open source software is community collaboration. Please do not email me, or any committers directly regarding issues or support of this library. Please use [GitHub Issues](https://github.com/cocoahero/android-gmaps-addons/issues) for these types of things so that others may help or learn from them.
