@@ -66,13 +66,13 @@ provider.close();
 ## Tips & Tricks
 
 ### Google Maps Sans Google
-If you have no need for Google's baselayer, you can turn it off my setting your GoogleMap instance's map type to `GoogleMap.MAP_TYPE_NONE`. This also has the added benefit of making your app completely offline capable when paired with a MapBoxOfflineTileProvider.
+If you have no need for Google's baselayer, you can turn it off by setting your GoogleMap instance's map type to `GoogleMap.MAP_TYPE_NONE`. This also has the added benefit of making your app completely offline capable when paired with a MapBoxOfflineTileProvider.
 
 ## Issues / Support
 The key behind the beauty of open source software is community collaboration. Please do not email me, or any committers directly regarding issues or support of this library. Please use [GitHub Issues](https://github.com/cocoahero/android-gmaps-addons/issues) for these types of things so that others may help or learn from them.
 
 ## License
-Copyright (c) 2012 Jonathan Baker
+Copyright (c) 2014 Jonathan Baker
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
